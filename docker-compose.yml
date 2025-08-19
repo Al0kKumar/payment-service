@@ -1,15 +1,15 @@
-version: '3.8'
-
 services:
 
-  postgres_payment: # This is correctly nested
-    image: postgres:15-alpine
-    container_name: postgres_payment
-    ports:
-      - "5432:5432"
+  postgres-payment:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
     environment:
-      POSTGRES_USER: springuser
-      POSTGRES_PASSWORD: springpassword
-      POSTGRES_DB: paymentdb
-    volumes:
-      - ./postgres-data/payment:/var/lib/postgresql/datastgres-data/payment:/var/lib/postgresql/data
+      POSTGRES_PASSWORD: example
