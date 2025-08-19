@@ -1,18 +1,16 @@
 package com.example.payment_service.dto;
 
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@AllArgsConstructor
 @Setter
-public class OrderPlacedEvent {
-    private String userId;
+@Getter
+public class PaymentStatusEvent {
 
     private String orderId;
-
-    private double amount;
 
     private String status;
 }

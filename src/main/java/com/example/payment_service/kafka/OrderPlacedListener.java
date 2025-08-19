@@ -1,23 +1,27 @@
 package com.example.payment_service.kafka;
 
 import com.example.payment_service.dto.OrderPlacedEvent;
+import com.example.payment_service.dto.PaymentStatusEvent;
 import com.example.payment_service.entity.Payment;
 import com.example.payment_service.repository.PaymentRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
 
-@AllArgsConstructor
+@Component
 @RequiredArgsConstructor
-@NoArgsConstructor
 public class OrderPlacedListener {
 
-    private PaymentRepository paymentRepository;
+    private final PaymentRepository paymentRepository;
+    private static final String PAYMENT_STATUS_TOPIC = "payment-status-topic";
+    private final KafkaTemplate<String,PaymentStatusEvent> kafkaTemplate;
 
     @KafkaListener(topics = "order-placed-topic", groupId = "payment-service-group")
+    @Transactional
     public void listen(OrderPlacedEvent event){
-        System.out.println("Received message for order: " + event.getOrderid());
+        System.out.println("Received message for order: " + event.getOrderId());
 
         // Simulate payment processing
         boolean paymentSuccessful = Math.random() > 0.1;
@@ -26,14 +30,21 @@ public class OrderPlacedListener {
 
         // Save the payment status to the database
         Payment payment = new Payment();
-        payment.setOrderid(event.getOrderid());
-        payment.setUserid(event.getUserid());
+        payment.setOrderId(event.getOrderId());
+        payment.setUserId(event.getUserId());
         payment.setAmount(event.getAmount());
         payment.setStatus(paymentStatus);
 
         paymentRepository.save(payment);
 
-        System.out.println("Payment for order " + event.getOrderid() + " processed with status: " + paymentStatus);
+        System.out.println("Payment for order " + event.getOrderId() + " processed with status: " + paymentStatus);
+
+        PaymentStatusEvent paymentStatusEvent = new PaymentStatusEvent();
+        paymentStatusEvent.setOrderId(event.getOrderId());
+        paymentStatusEvent.setStatus(paymentStatus);
+
+        kafkaTemplate.send(PAYMENT_STATUS_TOPIC, event.getOrderId(), paymentStatusEvent);
+
     }
 
 }

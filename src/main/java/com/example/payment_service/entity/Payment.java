@@ -11,16 +11,15 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String orderid;
+    private String orderId;
 
-    private String userid;
+    private String userId;
 
     private double amount;
 
