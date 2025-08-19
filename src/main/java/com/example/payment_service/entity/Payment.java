@@ -17,9 +17,8 @@ public class Payment {
     private Long id;
 
     private String userEmail;
-
     private String orderId;
-    private String userId;
+    private Long userId;
     private double amount;
     private String status;
 }
