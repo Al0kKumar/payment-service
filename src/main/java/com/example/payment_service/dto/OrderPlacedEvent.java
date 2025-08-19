@@ -5,12 +5,12 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 public class OrderPlacedEvent {
-    private String userId;
+    private Long userId;
 
     private String orderId;
+
+    private String userEmail;
 
     private double amount;
 

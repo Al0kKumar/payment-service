@@ -6,11 +6,13 @@ import org.springframework.stereotype.Component;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
 public class PaymentStatusEvent {
 
+    private Long userId;
+
     private String orderId;
+
+    private String userEmail;
 
     private String status;
 }

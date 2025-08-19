@@ -7,8 +7,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Payment {
@@ -17,13 +16,10 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String userEmail;
+
     private String orderId;
-
     private String userId;
-
     private double amount;
-
     private String status;
-
-
 }

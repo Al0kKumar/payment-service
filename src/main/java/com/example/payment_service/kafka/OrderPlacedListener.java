@@ -31,6 +31,7 @@ public class OrderPlacedListener {
         // Save the payment status to the database
         Payment payment = new Payment();
         payment.setOrderId(event.getOrderId());
+        payment.setUserEmail(event.getUserEmail());
         payment.setUserId(event.getUserId());
         payment.setAmount(event.getAmount());
         payment.setStatus(paymentStatus);
@@ -41,9 +42,11 @@ public class OrderPlacedListener {
 
         PaymentStatusEvent paymentStatusEvent = new PaymentStatusEvent();
         paymentStatusEvent.setOrderId(event.getOrderId());
+        paymentStatusEvent.setUserId(event.getUserId());
         paymentStatusEvent.setStatus(paymentStatus);
+        paymentStatusEvent.setUserEmail(event.getUserEmail());
 
-        kafkaTemplate.send(PAYMENT_STATUS_TOPIC, event.getOrderId(), paymentStatusEvent);
+        kafkaTemplate.send(PAYMENT_STATUS_TOPIC, paymentStatusEvent);
 
     }
 
